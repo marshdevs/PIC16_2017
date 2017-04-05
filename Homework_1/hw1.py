@@ -92,7 +92,20 @@ def dayofweek(M, D, Y):
                 weekIndex -= dayOffset
     return weekdays[weekIndex%7]
 
-# def longestpath(d):
+def longestpath(d):
+    longest = 0
+    for key in d:
+        val = key
+        length = 0
+        while True:
+            try:
+                val = d[val]
+                length += 1
+            except KeyError:
+                break
+        if length > longest:
+            longest = length
+    return longest
 
 # def flip1in3():
 
@@ -106,16 +119,16 @@ def main():
     # bNaturalNumber2 = squaresupto(bNaturalNumber1)
     # print(bNaturalNumber2)
 
-    cMonth = 9
-    cDay = 27
-    cYear = 2017
-    cDay = dayofweek(cMonth, cDay, cYear)
-    print(cDay)
+    # cMonth = 9
+    # cDay = 27
+    # cYear = 2017
+    # cDay = dayofweek(cMonth, cDay, cYear)
+    # print(cDay)
 
-    # dDict1 = dict()
-    # dLength = longestpath(dDict1)
+    # dDict = dict({1:2, 2:3, 3:4, 4:5, 5:6, 6:7, 7:8})
+    # dLength = longestpath(dDict)
     # print(dLength)
 
-    # flip1in3()
+    flip1in3()
 
 if __name__ == "__main__": main()

@@ -1,5 +1,16 @@
+# Homework 1
+# Filename: hw1.py
+# Author: Marshall Briggs
+
 import random
 def largerindex(l):
+    """
+    Function: largerindex(l)
+    INPUT: A list, l
+    OUTPUT: A list, m
+    Description: A function that takes as input a list l of numbers, and outputs a new list m, 
+                 such that m[i] = 1 if l[i] > i, m[i] = 0 if l[i] = i, and m[i] = -1 if l[i] < i.
+    """
     m = []
     for idx, val in enumerate(l):
         if val > idx:
@@ -11,6 +22,13 @@ def largerindex(l):
     return m
 
 def squaresupto(n):
+    """
+    Function: squaresupto(n)
+    INPUT: A natural number, n
+    OUTPUT: All squares up to and including n
+    Description: A function that takes as input a natural number n, and outputs a list of all the square numbers
+                 up to (and possibly including) n.
+    """
     i = 1
     square = 1
     squares = []
@@ -23,6 +41,13 @@ def squaresupto(n):
     return squares
 
 def dayofweek(M, D, Y):
+    """
+    Function: dayofweek(M, D, Y)
+    INPUT: A date, in the form of three numbers (Month, day, year). Accepted date ranges are
+           [1-12]/[1-31]/[1:]
+    OUTPUT: The day of the week of the given date
+    Description: A function [day] = weekday(M, D, Y), which tells you the day of the week on date M/D/Y
+    """
     weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     monthDays = dict({1 : 31, 2 : 28, 3 : 31, 4 : 30, 5 : 31, 6 : 30, 7 : 31, 8 : 31, 9 : 30, 10 : 31, 11 : 30, 12 : 31})
     weekIndex = 0
@@ -94,7 +119,13 @@ def dayofweek(M, D, Y):
     return weekdays[weekIndex%7]
 
 def longestpath(d):
-    # Longest path length includes number of steps in the path, not elements in the path
+    """
+    Function: longestpath(d)
+    INPUT: A dictionary, d
+    OUTPUT: An integer, the length of the longest path in the given dictionary. 
+            Longest path length includes number of steps in the path, not elements in the path
+    Description: A function that finds the length of a longest path: (a : b) - (b : c) - ..., in a dictionary
+    """
     longest = 0
     for key in d:
         val = key
@@ -110,7 +141,13 @@ def longestpath(d):
     return longest
 
 def flip1in3():
-
+    """
+    Function: flip1in3()
+    INPUT: N/A
+    OUTPUT: 0 or 1, representing the result of a biased coin flip. P(1) = 1/3, P(0) = 2/3
+    Description: A function that uses only "fair coins" to generate a "biased coin" with success probability 1/3.
+                 Runtime: O(1)
+    """
     coin1 = random.randint(0,1)
     coin2 = random.randint(0,1)
     coin3 = random.randint(0,1)
@@ -143,24 +180,29 @@ def flip1in3():
     return coinflip
 
 def main():
+    # Test case for largerindex(l)
     # aList1 = [0,1,2,0,12]
     # aList2 = largerindex(aList1)
     # print (aList2)
 
+    # Test case for squaresupto(n)
     # bNaturalNumber1 = 100
     # bNaturalNumber2 = squaresupto(bNaturalNumber1)
     # print(bNaturalNumber2)
 
+    # Test case for dayofweek(M, D, Y)
     # cMonth = 9
     # cDay = 27
     # cYear = 2017
     # cDay = dayofweek(cMonth, cDay, cYear)
     # print(cDay)
 
+    # Test case for longestpath(d)
     # dDict = dict({1:2, 2:3, 3:4, 4:5, 5:6, 6:7, 7:8})
     # dLength = longestpath(dDict)
     # print(dLength)
 
+    # Test case for flip1in3()
     overallCount = 0
     for j in range(50):
         counter = 0

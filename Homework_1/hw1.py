@@ -1,3 +1,4 @@
+import random
 def largerindex(l):
     m = []
     for idx, val in enumerate(l):
@@ -93,6 +94,7 @@ def dayofweek(M, D, Y):
     return weekdays[weekIndex%7]
 
 def longestpath(d):
+    # Longest path length includes number of steps in the path, not elements in the path
     longest = 0
     for key in d:
         val = key
@@ -107,8 +109,38 @@ def longestpath(d):
             longest = length
     return longest
 
-# def flip1in3():
+def flip1in3():
 
+    coin1 = random.randint(0,1)
+    coin2 = random.randint(0,1)
+    coin3 = random.randint(0,1)
+    # P(1) = 3/8
+    op1 = coin1 + coin2 + coin3
+    if op1 == 1:
+        op1 = 1
+    else:
+        op1 = 0
+
+    coin4 = random.randint(0,1)
+    coin5 = random.randint(0,1)
+    coin6 = random.randint(0,1)
+    # P(3) = 1/8
+    op2 = coin4 * coin5 * coin6
+
+    coin7 = random.randint(0,1)
+    coin8 = random.randint(0,1)
+    coin9 = random.randint(0,1)
+    # P(*) = 8/8
+    op3 = coin7 + coin8 + coin9
+    if op3 is False:
+        op3 = 1
+    else:
+        op3 = 1
+    
+    coinflip = op1/(op2 + op3)
+    if coinflip == 1/2:
+        coinflip = 0
+    return coinflip
 
 def main():
     # aList1 = [0,1,2,0,12]
@@ -129,6 +161,13 @@ def main():
     # dLength = longestpath(dDict)
     # print(dLength)
 
-    flip1in3()
+    overallCount = 0
+    for j in range(50):
+        counter = 0
+        for i in range(1000):
+            if flip1in3():
+                counter += 1
+        overallCount += counter
+    print("Average probability: {}".format(overallCount/50))
 
 if __name__ == "__main__": main()

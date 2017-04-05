@@ -24,10 +24,8 @@ def squaresupto(n):
 def dayofweek(M, D, Y):
     weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     monthDays = dict({1 : 31, 2 : 28, 3 : 31, 4 : 30, 5 : 31, 6 : 30, 7 : 31, 8 : 31, 9 : 30, 10 : 31, 11 : 30, 12 : 31})
-
     weekIndex = 0
     yearsFromNow = Y - 2017
-
     if yearsFromNow > 0:
         for year in range(2018, Y):
             if year % 4:
@@ -50,7 +48,6 @@ def dayofweek(M, D, Y):
         weekIndex += 27
         # Days in M
         weekIndex += D
-
     elif yearsFromNow < 0:
         for year in range(Y+1, 2017):
             if year % 4:
@@ -76,10 +73,25 @@ def dayofweek(M, D, Y):
         weekIndex -= dayOffset
     else:
         if M > 4:
-            
-        return
-
+            for month in range(5, M):
+                weekIndex += monthDays[month]
+            weekIndex += 27
+            weekIndex += D
+        elif M < 4:
+            for month in range(M+1, 4):
+                weekIndex -= monthDays[month]
+            weekIndex -= 3
+            dayOffset = monthDays[M] - D
+            weekIndex -= dayOffset
+        else:
+            if D > 3:
+                dayOffset = D - 3
+                weekIndex += dayOffset
+            elif D < 3:
+                dayOffset = 3 - D
+                weekIndex -= dayOffset
     return weekdays[weekIndex%7]
+
 # def longestpath(d):
 
 # def flip1in3():
@@ -94,9 +106,9 @@ def main():
     # bNaturalNumber2 = squaresupto(bNaturalNumber1)
     # print(bNaturalNumber2)
 
-    cMonth = 1
+    cMonth = 9
     cDay = 27
-    cYear = 1988
+    cYear = 2017
     cDay = dayofweek(cMonth, cDay, cYear)
     print(cDay)
 

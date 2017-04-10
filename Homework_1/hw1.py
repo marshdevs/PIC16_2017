@@ -127,13 +127,17 @@ def longestpath(d):
     Description: A function that finds the length of a longest path: (a : b) - (b : c) - ..., in a dictionary
     """
     longest = 0
+    e = dict()
     for key in d:
         val = key
         length = 0
+        e[key] = d[key]
         while True:
             try:
                 val = d[val]
                 length += 1
+                if e[key] == d[val]:
+                    break
             except KeyError:
                 break
         if length > longest:

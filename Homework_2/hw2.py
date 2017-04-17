@@ -1,4 +1,4 @@
-# Homework 1
+# Homework 2
 # Filename: hw2.py
 # Author: Marshall Briggs
 

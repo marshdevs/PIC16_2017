@@ -1,4 +1,4 @@
-# Homework 1
+# Homework 2
 # Filename: hw2.py
 # Author: Marshall Briggs
 
@@ -11,8 +11,8 @@ def mytype(s):
     INPUT: A variable, s
     OUTPUT: A string, the type of that variable
     Description: A function that performs the same action as type(), and can 
-    recognize integers, floats, strings, and integer lists (lists must be provided in
-    the following format: '[1, 2, 3, ..., 99]')
+    recognize integers, floats, strings, and integer lists (lists MUST be provided in
+    the following format: '[1,2,3, ...,99]')
     """
 
     inputString = str(s)
@@ -27,44 +27,45 @@ def mytype(s):
         if floatQuery.group() == inputString:
             return "Float"
 
-    listMatch = re.findall('[0-9]*, ', inputString)
+    listMatch = re.findall('([0-9]*,|[0-9]*\.[0-9]*,)', inputString)
     listReplica = '['
     for item in listMatch:
+        item += ' '
         listReplica += item
-    listEnd = re.search('[0-9]*]$', inputString)
+        
+    listEnd = re.search('([0-9]*|[0-9]*\.[0-9]*)]$', inputString)
     if listEnd:
         listReplica += inputString[listEnd.start():]
     if listReplica == inputString:
         return "List"
-
     return "String"
     
 
-def findpdfs(l):
+def findpfds(l):
     """
-    Function: findpdfs(l)
-    INPUT: A list of filenames
+    Function: findpfds(l)
+    INPUT: A list of strings, filenames
     OUTPUT: A list of the names of all PDF files (without extensions)
     Description: A function that takes as input a list of filenames, and lists 
                  the names of all PDF files, without extensions
     """
     m = []
     for item in l:
-        if re.search('^([a-zA-Z0-9]*)\.pdf', item):
-            filename = re.sub('^([a-zA-Z0-9]*)\.pdf', r'\1', item)
+        if re.search('^([a-zA-Z0-9]*)\.pdf$', item):
+            filename = re.sub('^([a-zA-Z0-9]*)\.pdf$', r'\1', item)
             m.append(filename)
     return m
 
 
-def names(name):
+def nameorder(name):
     """
-    Function: names(name)
+    Function: nameorder(name)
     INPUT: A string, a name of the form "Firstname Lastname"
     OUTPUT: A string, the input name, rearranged as "Lastname, Firstname"
     Description: A function that takes names of the form "Firstname Lastname"
                  and outputs them in the form "Lastname, Firstname"
     """
-    return re.sub('^([a-zA-Z]* [A-Z])[a-zA-Z]* ([a-zA-Z]*)$', r'\2, \1', name)
+    return re.sub('^([a-zA-Z]* [A-Z]|[a-zA-Z]*)[a-zA-Z]* ([a-zA-Z]*)$', r'\2, \1', name)
 
 def findemail(url):
     """
@@ -76,7 +77,8 @@ def findemail(url):
     """
     website = urllib2.urlopen(url).read()
     webText = str(website)
-    allEmails = re.findall('([0-9a-zA-Z\.]*?(@| AT | at |AT)[0-9a-zA-Z\.]*(\.|DOT| dot | DOT )(edu|com|org))', webText)
+    allEmails = re.findall('([0-9a-zA-Z\.]*?(@| AT | at |AT| \[at\] ).*(\.|DOT| dot | DOT | \[dot\] )(edu|com|org))', webText)
+    # allEmails = re.findall('([0-9a-zA-Z\.]*?(@| AT | at |AT|\[at\]|\[AT\]| \[at\] | \[AT\] )[0-9a-zA-Z\.]*(\.|DOT| dot | DOT | \[dot\] |\[dot\]| \[DOT\] |\[DOT\])(edu|com|org))', webText)
     emailDict = dict()
     for item in allEmails:
         address = item[0]
@@ -119,22 +121,160 @@ def main():
     # d = "sd21dsf34"
     # print mytype(d)
 
-    # Test cases for findpdfs(l)
+    # Test cases for findpfds(l)
     # l = ['apple.jpg', 'bear.pdf', 'cat.png', 'dog.txt', 'eagle.c', 'fox.pdf', 'google.gif', 'happy.pdf']
-    # print findpdfs(l)
+    # print findpfds(l)
 
-    # Test cases for names(name)
+    # Test cases for nameorder(name)
     # name = "Jack Bellanucci Gordon"
-    # print names(name)
+    # print nameorder(name)
 
     # Test cases for findemail(url)
     # url = 'http://web.cs.ucla.edu/classes/spring17/cs111/syllabus.html'
     # print findemail(url)
 
     # Test cases for happiness(text)
-    text = "Hello there, my beautiful name is Dave. I am a super happy funny fun terrorist"
-    print happiness(text)
+    # text = "Hello there, my beautiful name is Dave. I am a super happy funny fun terrorist"
+    # print happiness(text)
+
+    # HW2 Challenge 1:
+    print mytype(2)
+    print mytype(-2.3)
+    print mytype([2,4.5])
+    print mytype('[1,]')
     
+    # HW2 Challenge 2:
+    L=['pdf.py', 'hw2.pdf', 'hw3.pdft']
+    print findpfds(L)
+
+    # HW2 Challenge 3:
+    print nameorder('Minnie Shulman')
+    print nameorder('Susie Badger Rombach')
+
+    # HW2 Challenge 4:
+    print findemail('http://www.math.ucla.edu/~bertozzi/')
+    print findemail('http://www.math.ucla.edu/~mason/cover.html')
+
+    # HW2 Challenge 5:
+    verse1 = '''Hear the sledges with the bells--
+             Silver bells!
+What a world of merriment their melody foretells!
+       How they tinkle, tinkle, tinkle,
+           In the icy air of night!
+       While the stars that oversprinkle
+       All the heavens, seem to twinkle
+           With a crystalline delight;
+         Keeping time, time, time,
+         In a sort of Runic rhyme,
+To the tintinnabulation that so musically wells
+    From the bells, bells, bells, bells,
+               Bells, bells, bells--
+  From the jingling and the tinkling of the bells.'''
+    verse2 = '''Hear the mellow wedding bells
+             Golden bells!
+What a world of happiness their harmony foretells!
+       Through the balmy air of night
+       How they ring out their delight!
+           From the molten-golden notes,
+               And all in tune,
+           What a liquid ditty floats
+    To the turtle-dove that listens, while she gloats
+               On the moon!
+         Oh, from out the sounding cells,
+What a gush of euphony voluminously wells!
+               How it swells!
+               How it dwells
+           On the Future! how it tells
+           Of the rapture that impels
+         To the swinging and the ringing
+           Of the bells, bells, bells,
+    Of the bells, bells, bells, bells,
+               Bells, bells, bells--
+  To the rhyming and the chiming of the bells!'''
+    verse3 = '''Hear the loud alarum bells--
+                  Brazen bells!
+What tale of terror, now, their turbulency tells!
+       In the startled ear of night
+       How they scream out their affright!
+         Too much horrified to speak,
+         They can only shriek, shriek,
+                  Out of tune,
+In a clamorous appealing to the mercy of the fire,
+In a mad expostulation with the deaf and frantic fire,
+            Leaping higher, higher, higher,
+            With a desperate desire,
+         And a resolute endeavor
+         Now--now to sit or never,
+       By the side of the pale-faced moon.
+            Oh, the bells, bells, bells!
+            What a tale their terror tells
+                  Of Despair!
+       How they clang, and clash, and roar!
+       What a horror they outpour
+On the bosom of the palpitating air!
+       Yet the ear, it fully knows,
+            By the twanging,
+            And the clanging,
+         How the danger ebbs and flows ;
+       Yet, the ear distinctly tells,
+         In the jangling,
+         And the wrangling,
+       How the danger sinks and swells,
+By the sinking or the swelling in the anger of the bells--
+             Of the bells--
+     Of the bells, bells, bells, bells,
+         Bells, bells, bells--
+  In the clamour and the clangour of the bells!'''
+    verse4 = '''          Hear the tolling of the bells--
+               Iron bells!
+What a world of solemn thought their monody compels!
+       In the silence of the night,
+       How we shiver with affright
+  At the melancholy meaning of their tone!
+         For every sound that floats
+         From the rust within their throats
+              Is a groan.
+         And the people--ah, the people--
+         They that dwell up in the steeple,
+              All alone,
+         And who, tolling, tolling, tolling,
+            In that muffled monotone,
+         Feel a glory in so rolling
+            On the human heart a stone--
+       They are neither man nor woman--
+       They are neither brute nor human--
+              They are Ghouls:--
+         And their king it is who tolls ;
+         And he rolls, rolls, rolls, rolls,
+              Rolls
+            A paean from the bells!
+    And his merry bosom swells
+            With the paean of the bells!
+         And he dances, and he yells ;
+       Keeping time, time, time,
+       In a sort of Runic rhyme,
+            To the paean of the bells--
+               Of the bells :
+       Keeping time, time, time,
+       In a sort of Runic rhyme,
+            To the throbbing of the bells--
+            Of the bells, bells, bells--
+            To the sobbing of the bells ;
+       Keeping time, time, time,
+            As he knells, knells, knells,
+       In a happy Runic rhyme,
+            To the rolling of the bells--
+         Of the bells, bells, bells--
+            To the tolling of the bells,
+      Of the bells, bells, bells, bells--
+               Bells, bells, bells--
+  To the moaning and the groaning of the bells.'''
+
+    print happiness(verse1)
+    print happiness(verse2)
+    print happiness(verse3)
+    print happiness(verse4)
+
 class Happiness:
     def __init__(self):
         self.happinessDictionary={'laughter':8.5,

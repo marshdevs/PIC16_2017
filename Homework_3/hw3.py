@@ -117,8 +117,9 @@ def main():
     # fd = open('the_great_gatsby.txt', 'r')
     # book = fd.read()
     # happiness_arc(book)
+    return
 
-class Happiness: 
+class Happiness:
     def __init__(self):
         self.happinessDictionary={'laughter':8.5,
         'happiness':8.44,

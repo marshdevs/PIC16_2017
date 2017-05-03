@@ -2,8 +2,8 @@
 # Filename: hw4.py
 # Author: Marshall Briggs
 
-import matplotlib
-matplotlib.use('TkAgg')
+# import matplotlib
+# matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
@@ -41,17 +41,21 @@ def heart(im):
     img = normalizeImage(im)
     im1=img[:,:,0].copy()
     n,m=im1.shape
+    im2 = im1.copy()
 
     imask=[[[0,0,1]]*m]*n
     imask=np.array(imask,dtype='float')
     x,y=np.ogrid[0:n, 0:m]
     # secondterm = ((x-n/2)**2) * ((y-m/2)**3)
     # heartmask= ((x-n/2)**2+(y-m/2)**2 - 1)**3 - secondterm < 0
-    heartmask = ((x-n/2)**2 + (y-m/2)**2 > 90000)
-    # imask[heartmask]=[1,0,0]
-    im1[heartmask] = [.34444]
-    bwim = [[[im1[i,j]]*3 for j in range(m)] for i in range(n)]
-    plt.imshow(bwim)
+
+    heartmask = ((x-n/5)**2 + (y-m/3)**2 > 16000) & ((x-n/5)**2 + (y-2*m/3)**2 > 16000) | ( (y < 2*x - n/4) | (y > -2*x + 3*n/4) )
+    # rcircmask = ((x-n/5)**2 + (y-2*m/3)**2 > 16000) & (x < n/4)
+    im2[heartmask] = 1
+    # & (y < 2*m/3 + 400) & (y > x)
+    # rlinemask = (y > m/3 + 500) & (y < 2*m/3 + 400) & (y > -x)
+    # bwim = [[[im2[i,j]]*3 for j in range(m)] for i in range(n)]
+    plt.imshow(im2, cmap='gray')
     plt.show()
 
 def blurring(im, method):
@@ -149,7 +153,7 @@ def detect_edge(im, method):
                     vsfilter = np.array([[-1.0,-2.0,-1.0],[0,0,0],[1.0,2.0,1.0]])
                     nlist = [[im1[a,b] for a in range(i-1, i+2)] for b in range(j-1, j+2)]
                     sh = hsfilter*nlist
-                    sv = hsfilter*nlist
+                    sv = vsfilter*nlist
                     newpixel = math.sqrt((np.sum(sh)**2 + np.sum(sv)**2))
                     edgedim1[i,j] = 2 * math.fabs((newpixel + 4.0)/8.0 - 0.5)
         plt.imshow(edgedim1, cmap="gray")
@@ -269,8 +273,9 @@ def main():
     #  otsu_threshold(img)
 
     # Test Cases for Challenge 5 - Finished?
-    img = mpimg.imread('husky.jpg')
-    blur_background(img)
+    # img = mpimg.imread('husky.jpg')
+    # blur_background(img)
+    return
 
 
 if __name__ == "__main__": main()

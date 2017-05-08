@@ -18,7 +18,7 @@ def darken_top_half(im, d):
     x,y=np.ogrid[0:n, 0:m]
     manipimg = im.copy()
     manipimg = [[d if b <n/2 else im1[a,b] for b in range(m)] for a in range(n)]  
-    plt.imshow(manipimg, gray)
+    plt.imshow(manipimg, cmap='gray')
     plt.show()
     
 def main():

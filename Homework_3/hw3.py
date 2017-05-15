@@ -106,13 +106,13 @@ def happiness_arc(book):
     plt.show()
 
 def main():
-    # Test Case for fractal(n, L)
+    # 1. Test Case for fractal(n, L) -- DONE
     # fractal(6,150)
 
-    # Test Case for n_gons(n) -- NOT DONE
+    # 2. Test Case for n_gons(n) -- NOT DONE
     # n_gons(1)
 
-    # Test Case for happiness_arc(book)
+    # 5. Test Case for happiness_arc(book) -- DONE
     # fd = open('the_old_man_and_the_sea.txt', 'r')
     # fd = open('the_great_gatsby.txt', 'r')
     # book = fd.read()

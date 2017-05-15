@@ -201,7 +201,7 @@ def balance(eq):
 
     for i in coefficients:
         coefficients[i] = coefficients[i] * multiplier
-    print coefficients
+    # print coefficients
 
     balanced_Stoich = ""
     equals_placed = 0

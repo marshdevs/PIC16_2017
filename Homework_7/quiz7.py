@@ -8,6 +8,8 @@ array) adjacency matrix, and a single specified node v in the network, and a thr
 function outputs a list of all of the nodes that can be reached from v traveling only along edges that
 have weight ≥ k.
 
+Unfinished.
+
 @author: marshallbb
 """
 

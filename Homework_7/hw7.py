@@ -171,12 +171,12 @@ def two_sat(exp):
             not satisfiable.
     Description: A polynomial time algorithm for 2-SAT
     """
-    expressions = dict()
+    expressions = []
     implications = dict()
     inverses = dict()
     for i in exp.args:
         for j in i.args:
-            expressions[j] = []
+            expressions.append(j)
             if len(str(j)) == 1:
                 implications[j] = []
                 s1 = ~j
@@ -185,15 +185,64 @@ def two_sat(exp):
                 inverses[s1] = j
     for i in exp.args:
         if len(i.args) > 1:
-            #implications[i.args[0]].append(inverses[i.args[1]])
+            # implications[i.args[0]].append(inverses[i.args[1]])
             implications[inverses[i.args[0]]].append(i.args[1])
-            #implications[i.args[1]].append(inverses[i.args[0]])
+            # implications[i.args[1]].append(inverses[i.args[0]])
             implications[inverses[i.args[1]]].append(i.args[0])
         else:
             implications[i.args[0]].append(i.args[0])
 
-    print implications
-    print expressions
+    # print implications
+
+    Vs = []
+
+    for i in expressions:
+        Q = []
+        V = []
+        Q.append(i)
+        while(len(Q) > 0):
+            for j in implications[Q[0]]:
+                element_present = 0
+                for k in Q:
+                    if k == j:
+                        element_present = 1
+                for l in V:
+                    if l == j:
+                        element_present = 1
+                if not element_present:
+                    Q.append(j)
+            V.append(Q[0])
+            Q.remove(Q[0])
+        Vs.append(V)
+    
+    expressions_vals = dict()
+    for i in range(len(expressions)):
+        Vs[i].remove(expressions[i])
+        expressions_vals[expressions[i]] = 0
+        # print expressions[i], Vs[i]
+        for j in Vs[i]:
+            if j == inverses[expressions[i]]:
+                # 1 == False
+                expressions_vals[expressions[i]] = expressions_vals[expressions[i]] + 1
+                try:
+                    # 2 == True
+                    expressions_vals[j] = expressions_vals[j] + 2
+                except KeyError:
+                    continue
+                    # 3 == Neither
+    # print expressions_vals
+
+    satisfying_expression = dict()
+    for key in expressions_vals:
+        if expressions_vals[key] == 0:
+            satisfying_expression[key] = [True, False]
+        elif expressions_vals[key] == 1:
+            satisfying_expression[key] = False
+        elif expressions_vals[key] == 2:
+            satisfying_expression[key] = True
+        else:
+            return False
+    return satisfying_expression
 
 def main():
     # Test Cases for Challenge 1
@@ -259,7 +308,8 @@ def main():
 
     # Test Cases for Challenge 4
     x,y,z = sp.symbols('x y z')
-    expr = (x | y) & (z | ~x) & (~y |z)
+    # expr = (x | y) & (z | ~x) & (~y |z)
+    expr = (x | y) & (~x | y)
     print two_sat(expr)
 
 if __name__ == "__main__": main()

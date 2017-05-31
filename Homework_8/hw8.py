@@ -3,6 +3,16 @@
 # Author: Marshall Briggs
 
 import Tkinter as Tk
+import tkMessageBox
+from PyQt5 import QtGui, QtCore, QtWidgets
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import numpy as np
+import sympy as sp
+import sys
+import random
 
 class Maxlist:
     """
@@ -31,12 +41,31 @@ class Maxlist:
         self.value.append(self.max + 1)
 
 class KNIGHTS:
-    def __init__(self, w, CURRENT, image):
+    def __init__(self, root, w, CURRENT, image, visited_squares):
+        self.root = root
         self.window = w
         self.position = CURRENT
         self.image = image
+        self.visited_board = visited_squares
+        self.valid_moves = []
         # Add function that places the knight picture
         # Add the game_board
+    def set_valid_moves(self, moves):
+        self.valid_moves = moves
+
+# Check for Loss / Win Condition: not yet Finished
+# def check_valid_moves(event, arg):
+#     CAN_STILL_PLAY = 0
+#     print arg[0].visited_board
+#     if not (len(arg[0].valid_moves) == 0):
+#         for i in arg[0].valid_moves:
+#             if arg[0].visited_board[(i[0]-1)*8 + (i[1]-1)] == 0:
+#                 print [i[0], i[1]]
+#                 print arg[0].visited_board[(i[0]-1)*8 + (i[1]-1)]
+#                 CAN_STILL_PLAY = 1
+#         if not CAN_STILL_PLAY:
+#             tkMessageBox.showinfo("GAME OVER", "No more valid moves!")
+#             arg[0].root.destroy()
 
 def knights_click(event, arg):
     # print(event.widget.find_closest(event.x, event.y))
@@ -66,7 +95,8 @@ def knights_click(event, arg):
             continue
         else:
             valid_moves.append(i)
-    # print valid_moves
+    arg[4].set_valid_moves(valid_moves)
+
     if arg[0] == 0:
         for i in valid_moves:
             if i == attempted_position:
@@ -74,6 +104,7 @@ def knights_click(event, arg):
                 #arg[4].window.create_rectangle(arg[1], arg[2], arg[1] + arg[3], arg[2] + arg[3], fill="green")
                 arg[4].window.create_image(arg[1], arg[2], image=arg[4].image, anchor='nw')
                 arg[4].position = rect
+                # arg[4].visited_board[rect-1] = 1
     # return rect
 
 
@@ -110,18 +141,23 @@ def knights_tour(n):
                 square_IDs.append([w.create_rectangle(event_width[i], event_height[j], event_width[i+1], event_height[j+1], fill="black"), 0, event_width[i], event_height[j], int(n/8)])
                 color_flag = 0
     board_game = [[i, j, 0] for i in range(8) for j in range(8)]
+    visited_squares = [0 for i in range(64)]
     for i in range(0, 64):
         board_game[i][2] = i+1
+        if i == 15:
+            visited_squares[i] = 1
     # You should give the board game to the class_object, make it global to
     # track where the knight has been
-    Knights_Game = KNIGHTS(w, CURRENT_WIDGET, knight)
+    Knights_Game = KNIGHTS(root, w, CURRENT_WIDGET, knight, visited_squares)
     for i in square_IDs:
         w.tag_bind(i[0], '<ButtonPress-1>', lambda event, arg=[i[1], i[2], i[3], i[4], Knights_Game, board_game]: knights_click(event, arg))
     
+    # w.bind('<ButtonPress-1>', lambda event, arg=[Knights_Game]: check_valid_moves(event, arg))
     w.pack()
     root.mainloop()
 
-def plotting_gui():
+class PlotGui(QtWidgets.QMainWindow):
+    # def plotting_gui():
     """
     Function: plotting_gui()
     INPUT: None
@@ -131,7 +167,181 @@ def plotting_gui():
                 labeling the roots. The user can choose a color for the parabola
                 and the roots.
     """
-    return
+    def __init__(self):
+        super(PlotGui, self).__init__()
+        self.CenWidget = QtWidgets.QWidget(self)
+        self.setCentralWidget(self.CenWidget)
+        self.color = "Blue"
+        self.root_color = 'b'
+        self.quad_eq_a = 1
+        self.quad_eq_b = 1
+        self.quad_eq_c = 0
+        self.UI_setup()
+        self.show()
+        # Toolbar for plot colors
+        #
+
+    def UI_setup(self):
+        self.figure = Figure()
+        self.canvas = FigureCanvas(self.figure)
+        self.button = QtWidgets.QPushButton("Plot", self)
+        self.button.clicked.connect(self.plot)
+        self.button.resize(self.button.minimumSizeHint())
+        self.button.move(100,100)
+
+        VLabel = QtWidgets.QLabel("y(x) = ax^2 + bx + c", self)
+        LLabel = QtWidgets.QLabel("Line Color", self)
+        RLabel = QtWidgets.QLabel("Root Color", self)
+        LcomboBox = QtWidgets.QComboBox(self)
+        RcomboBox = QtWidgets.QComboBox(self)
+        LcomboBox.addItem("Blue")
+        LcomboBox.addItem("Green")
+        LcomboBox.addItem("Red")
+        LcomboBox.addItem("Cyan")
+        LcomboBox.addItem("Magenta")
+        LcomboBox.addItem("Yellow")
+        LcomboBox.addItem("Black")
+        LcomboBox.addItem("White")
+        RcomboBox.addItem("Blue")
+        RcomboBox.addItem("Green")
+        RcomboBox.addItem("Red")
+        RcomboBox.addItem("Cyan")
+        RcomboBox.addItem("Magenta")
+        RcomboBox.addItem("Yellow")
+        RcomboBox.addItem("Black")
+        RcomboBox.addItem("White")
+        LcomboBox.activated[str].connect(self.set_color)
+        RcomboBox.activated[str].connect(self.set_root_color)
+
+        hbox1 = QtWidgets.QHBoxLayout()
+        hbox2 = QtWidgets.QHBoxLayout()
+        hbox3 = QtWidgets.QHBoxLayout()
+        hbox1.addStretch(1)
+        hbox2.addStretch(1)
+        hbox3.addStretch(1)
+        hbox1.addWidget(self.button)
+        hbox1.addWidget(self.canvas)
+        hbox3.addWidget(LLabel)
+        hbox3.addWidget(LcomboBox)
+        hbox3.addWidget(RLabel)
+        hbox3.addWidget(RcomboBox)
+
+        validator = QtGui.QDoubleValidator()
+        ALabel = QtWidgets.QLabel("a", self)
+        ALineEdit = QtWidgets.QLineEdit("0", self)
+        ALineEdit.setValidator(validator)
+        ALineEdit.textChanged[str].connect(self.set_quadratic_a)
+        BLabel = QtWidgets.QLabel("b", self)
+        BLineEdit = QtWidgets.QLineEdit("0", self)
+        BLineEdit.setValidator(validator)
+        BLineEdit.textChanged[str].connect(self.set_quadratic_b)
+        CLabel = QtWidgets.QLabel("c", self)
+        CLineEdit = QtWidgets.QLineEdit("0", self)
+        CLineEdit.setValidator(validator)
+        CLineEdit.textChanged[str].connect(self.set_quadratic_c)
+
+        hbox2.addWidget(ALabel)
+        hbox2.addWidget(ALineEdit)
+        hbox2.addWidget(BLabel)
+        hbox2.addWidget(BLineEdit)
+        hbox2.addWidget(CLabel)
+        hbox2.addWidget(CLineEdit)
+
+        vbox = QtWidgets.QVBoxLayout()
+        vbox.addStretch(1)
+        vbox.addLayout(hbox1)
+        vbox.addWidget(VLabel, alignment=QtCore.Qt.AlignCenter)
+        vbox.addLayout(hbox2)
+        vbox.addLayout(hbox3)
+        self.CenWidget.setLayout(vbox)
+        self.setGeometry(50,50,600,600)
+        self.setWindowTitle("Quadratic Function Plotter")
+
+    def plot(self):
+        xvalues = []
+        yvalues = []
+        xroots = []
+        yroots = []
+        z = sp.symbols('z')
+        f = self.quad_eq_a * z**2 + self.quad_eq_b * z + self.quad_eq_c
+        for i in sp.solve(f, z):
+            complexCheck = np.iscomplex(complex(i))
+            if not complexCheck:
+                xroots.append(i)
+                yroots.append(0)
+
+        for x in range(-1000,1000,1):
+            y = self.quad_eq_a * x**2 + self.quad_eq_b * x + self.quad_eq_c
+            xvalues.append(x)
+            yvalues.append(y)
+
+        self.figure.clear()
+        plot1 = self.figure.add_subplot(1, 1, 1)
+        if self.color == "Blue":
+            plot1.plot(xvalues, yvalues, 'b-', markersize=1)
+            plot1.plot(xroots, yroots, 'o', markersize=12, markerfacecolor=self.root_color)
+        elif self.color == "Green":
+            plot1.plot(xvalues, yvalues, 'g-', markersize=1, markerfacecolor=self.root_color)
+            plot1.plot(xroots, yroots, 'o', markersize=12, markerfacecolor=self.root_color)
+        elif self.color == "Red":
+            plot1.plot(xvalues, yvalues, 'r-', markersize=1, markerfacecolor=self.root_color)
+            plot1.plot(xroots, yroots, 'o', markersize=12, markerfacecolor=self.root_color)
+        elif self.color == "Cyan":
+            plot1.plot(xvalues, yvalues, 'c-', markersize=1, markerfacecolor=self.root_color)
+            plot1.plot(xroots, yroots, 'o', markersize=12, markerfacecolor=self.root_color)
+        elif self.color == "Magenta":
+            plot1.plot(xvalues, yvalues, 'm-', markersize=1, markerfacecolor=self.root_color)
+            plot1.plot(xroots, yroots, 'o', markersize=12, markerfacecolor=self.root_color)
+        elif self.color == "Yellow":
+            plot1.plot(xvalues, yvalues, 'y-', markersize=1, markerfacecolor=self.root_color)
+            plot1.plot(xroots, yroots, 'o', markersize=12, markerfacecolor=self.root_color)
+        elif self.color == "Black":
+            plot1.plot(xvalues, yvalues, 'k-', markersize=1, markerfacecolor=self.root_color)
+            plot1.plot(xroots, yroots, 'o', markersize=12, markerfacecolor=self.root_color)
+        elif self.color == "White":
+            plot1.plot(xvalues, yvalues, 'w-', markersize=1, markerfacecolor=self.root_color)
+            plot1.plot(xroots, yroots, 'o', markersize=12, markerfacecolor=self.root_color)
+        else: 
+            plot1.plot(xvalues, yvalues, 'b-', markersize=1, markerfacecolor=self.root_color)
+            plot1.plot(xroots, yroots, 'o', markersize=12, markerfacecolor=self.root_color)
+        self.canvas.draw()
+    
+    def set_color(self, text):
+        self.color = text
+
+    def set_root_color(self, text):
+        if text == "Black":
+            self.root_color = 'k'
+        else:
+            firstchar = text[0]
+            self.root_color = firstchar.lower()
+
+    def set_quadratic_a(self, value):
+        if value:
+            if value[0] == '-':
+                if len(value) > 1:
+                    negative_value = -1 * float(value[1:])
+                    self.quad_eq_a = negative_value
+            else:
+                self.quad_eq_a = float(value)
+
+    def set_quadratic_b(self, value):
+        if value:
+            if value[0] == '-':
+                if len(value) > 1:
+                    negative_value = -1 * float(value[1:])
+                    self.quad_eq_b = negative_value
+            else:
+                self.quad_eq_b = float(value)
+
+    def set_quadratic_c(self, value):
+        if value:
+            if value[0] == '-':
+                if len(value) > 1:
+                    negative_value = -1 * float(value[1:])
+                    self.quad_eq_c = negative_value
+            else:
+                self.quad_eq_c = float(value)
 
 def main():
     # Test Case for Challenge 1
@@ -144,11 +354,14 @@ def main():
     # print ML.value
 
     # Test Case for Challenge 2
-    n = 500
-    knights_tour(n)
+    # n = 500
+    # knights_tour(n)
 
     # Test Case for Challenge 3
-    return
+    app = QtWidgets.QApplication(sys.argv)
+    Window = PlotGui()
+    Window.show()
+    sys.exit(app.exec_())
 
 if __name__ == "__main__": main()
 

@@ -39,6 +39,7 @@ class Maxlist:
     
     def addmax(self):
         self.value.append(self.max + 1)
+        self.max = self.max + 1
 
 class KNIGHTS:
     def __init__(self, root, w, CURRENT, image, visited_squares):
@@ -81,6 +82,7 @@ def knights_click(event, arg):
         if i[2] == arg[4].position:
             current_position.append(i[0])
             current_position.append(i[1])
+
     moves = [[current_position[0]+1, current_position[1]-2],
     [current_position[0]+1, current_position[1]+2],
     [current_position[0]-1, current_position[1]-2],
@@ -108,30 +110,32 @@ def knights_click(event, arg):
     # return rect
 
 
-def knights_tour(n):
+def knights_tour(sq):
     """
     Function: knights_tour(n)
     INPUT: An integer n
     OUTPUT: Creates a window with an nxn board game
     Definition: Uses the Tkinter library to create a the puzzle game, "Knight's Tour"
     """
-    CURRENT_WIDGET = 16
+    n = 600
+    CURRENT_WIDGET = 2*sq
     square_IDs = []
     canvas_width = n + 100
     canvas_height = n + 100
-    event_width = [50 + i*(n/8) for i in range(9)]
-    event_height = [50 + i*(n/8) for i in range(9)]
+    event_width = [50 + i*(n/sq) for i in range(sq+1)]
+    event_height = [50 + i*(n/sq) for i in range(sq+1)]
     root = Tk.Tk()
     root.wm_title("Knight's Tour")
     knight = Tk.PhotoImage(file="knight-chess-piece.gif")
     knight = knight.subsample(31)
     knight = knight.zoom(n/160)
+    # Image size is meant to fit an 8x8 board
     w = Tk.Canvas(root, width=canvas_width, height=canvas_height)
     color_flag = 0
-    for i in range(8):
+    for i in range(sq):
         color_flag = 0 if color_flag == 1 else 1
-        for j in range(8):
-            if i == 1 and j == 7:
+        for j in range(sq):
+            if i == 1 and j == sq-1:
                 square_IDs.append([w.create_image(event_width[i], event_height[j], image=knight, anchor='nw'), 1, event_width[i], event_height[j], int(n/8)])
                 color_flag = 0 if color_flag == 1 else 1
             elif color_flag == 0:
@@ -140,9 +144,9 @@ def knights_tour(n):
             else:
                 square_IDs.append([w.create_rectangle(event_width[i], event_height[j], event_width[i+1], event_height[j+1], fill="black"), 0, event_width[i], event_height[j], int(n/8)])
                 color_flag = 0
-    board_game = [[i, j, 0] for i in range(8) for j in range(8)]
-    visited_squares = [0 for i in range(64)]
-    for i in range(0, 64):
+    board_game = [[i, j, 0] for i in range(sq) for j in range(sq)]
+    visited_squares = [0 for i in range(sq**2)]
+    for i in range(0, sq**2):
         board_game[i][2] = i+1
         if i == 15:
             visited_squares[i] = 1
@@ -173,8 +177,8 @@ class PlotGui(QtWidgets.QMainWindow):
         self.setCentralWidget(self.CenWidget)
         self.color = "Blue"
         self.root_color = 'b'
-        self.quad_eq_a = 1
-        self.quad_eq_b = 1
+        self.quad_eq_a = 0
+        self.quad_eq_b = 0
         self.quad_eq_c = 0
         self.UI_setup()
         self.show()
@@ -270,13 +274,16 @@ class PlotGui(QtWidgets.QMainWindow):
                 xroots.append(i)
                 yroots.append(0)
 
-        for x in range(-1000,1000,1):
+        for x in range(-10,10,1):
+        # for x in range(-100,100,1):
             y = self.quad_eq_a * x**2 + self.quad_eq_b * x + self.quad_eq_c
             xvalues.append(x)
             yvalues.append(y)
 
         self.figure.clear()
         plot1 = self.figure.add_subplot(1, 1, 1)
+        plot1.axhline(0, color="black", linestyle='--')
+        plot1.axvline(0, color="black", linestyle='--')
         if self.color == "Blue":
             plot1.plot(xvalues, yvalues, 'b-', markersize=1)
             plot1.plot(xroots, yroots, 'o', markersize=12, markerfacecolor=self.root_color)
@@ -354,10 +361,29 @@ def main():
     # print ML.value
 
     # Test Case for Challenge 2
-    # n = 500
+    # n = 4
     # knights_tour(n)
 
     # Test Case for Challenge 3
+    # app = QtWidgets.QApplication(sys.argv)
+    # Window = PlotGui()
+    # Window.show()
+    # sys.exit(app.exec_())
+
+    # Submission: Challenge 1
+    # L = [1,2,3]
+    # ML = Maxlist(L)
+    # print ML.value
+    # ML.addmax()
+    # print ML.value
+    # ML.delmax()
+    # print ML.value
+
+    # Submission: Challenge 2
+    # n = 7
+    # knights_tour(n)
+
+    # Submission: Challenge 3
     app = QtWidgets.QApplication(sys.argv)
     Window = PlotGui()
     Window.show()

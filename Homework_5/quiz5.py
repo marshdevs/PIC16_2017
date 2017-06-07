@@ -2,6 +2,10 @@
 """
 Created on Mon May 08 11:04:18 2017
 
+Write a function common_nbrs(N,x,y) that takes as input an adjacency matrix for a (simple, unweighted,
+undirected) network, and two specific nodes x and y. The function outputs the number of
+common neighbors of x and y: the number of nodes that have a link to both x and to y.
+
 @author: marshallbb
 """
 

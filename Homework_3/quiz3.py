@@ -1,3 +1,13 @@
+"""
+filename: quiz3.py
+
+Write a recursive function in Turtle that draws the following fractal: start with a square with sides
+of length L. Inside this square is a square with sides of length (3/4)L, which shares the bottom left
+corner with the bigger square. Inside that square is a square with sides of length (3/4)2L, which shares
+the top right corner. This goes on for n steps, alternating bottom left and top right corners.
+
+"""
+
 import turtle as t
 
 def threeqsq(n, L):

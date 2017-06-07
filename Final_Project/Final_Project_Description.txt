@@ -1,0 +1,22 @@
+Final Project 1: Flood-It!
+
+You have two weeks to complete the final project. You will hand in your well-commented .py files.
+You will also hand in a .pdf with a report that explains the problem, and explains how your function
+works. The report should contain pseudo-code. The report should be such that a python programmer
+could read it and understand how to create the program from scratch, without too much actual code.
+
+For all projects, there are many resources on the internet, and even codes that others have written.
+You may read these, but you are not allowed to use anyone else’s code directly in yours. The final
+projects should be doable using mostly tools and modules from the class. Please check with me if
+you are not sure whether you are allowed to use a new command or module.
+
+Become familiar with the game Flood-It!. Then, write a version of this game yourself in python.
+
+• The player should be able to choose both the board size and the number of colors.
+
+• Your game should start in a random state.
+
+• The hard part: Instead of the player playing against a fixed number, as you do in most apps of
+this game, you will let the player play against the computer. The number of moves the player
+needs to beat, is the number of moves that the computer would need if it played the game using
+a greedy algorithm. This number will depend on the starting configuration of the board.

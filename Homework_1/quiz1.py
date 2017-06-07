@@ -2,6 +2,10 @@
 """
 Created on Mon Apr 10 10:58:46 2017
 
+Write a function powerlists(L, k) that takes as input a list of numbers L = [a, b, c, . . .] and a natural
+number k, and outputs a list of k lists, one with elements a, b, c, . . ., one with elements a^2, b^2, c^2, . . .,
+etc, all the way up to a^k, b^k, c^k, . . .
+
 @author: marshallbb
 Name: Marshall Briggs
 Email: marshallbb@ucla.edu

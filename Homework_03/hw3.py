@@ -1,6 +1,26 @@
 # Homework 3
 # Filename: hw3.py
 # Author: Marshall Briggs
+"""
+Challenge 1
+Design your own fractal and draw it with turtle, by writing a recursive function.
+. . . . . . . . .
+Challenge 2
+Use both turtle and pyplot to create a function that draws regular n-gons (as a function of n).
+. . . . . . . . .
+Challenge 3
+Use matplotlibs to create two well-labeled, interesting data plots. One scatter plot, and one histogram.
+Choose your own data.
+. . . . . . . . .
+Challenge 4
+Visualize a small network of your own choosing in a helpful way. This means that you may use
+labels, directed edges, colors, etc..., if they are appropriate to help interpret the data. Find a network
+that has some more information than just nodes and edges and visualize this (for example, directed
+edges, different types of noed/edges, nodes belonging to different groups, etc...)
+. . . . . . . . .
+Challenge 5
+Use your happiness score function to create a “happiness arc” of a book.
+"""
 
 import re
 import turtle as t

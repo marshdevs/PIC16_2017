@@ -52,6 +52,7 @@ def clustering(data, k):
     Definition: A function that produces a figure presenting the results of using
                 k-means clustering on the input dataset.
     """
+    root = Tk.Tk()
     MURDER = 0
     ASSAULT = 1
     URBANPOP = 2
@@ -105,6 +106,7 @@ def clustering(data, k):
     tkMessageBox.showinfo("About the Data:", "This data contains crime statistics (murder, assault, urban population, rape) per 100,000 residents, across all 50 states, clustered by 4 different factors.")
     plt.show()
     plt.gcf().clear()
+    root.destroy()
 
 def knn(data, k, pred):
     """
@@ -115,6 +117,7 @@ def knn(data, k, pred):
     OUTPUT: Produces a figure, the results of using k-nearest neighbors classification
             on the dataset
     """
+    root = Tk.Tk()
     M = []
     for i in data:
         X_mem = []
@@ -167,9 +170,9 @@ def knn(data, k, pred):
     plt.show()
     plt.gcf().clear()
 
-    plt.title("Probability of Game Result, Given Seed Differential")
+    plt.title("Probability of Upset, Given Seed Differential")
     plt.ylabel("Seed Differential")
-    plt.xlabel("Probability Ranges from Purple (0.0, No Upset) to Yellow (1.0, Upset)")
+    plt.xlabel("Colors Range from Dark (Low probability) to Light (High probability)")
     plt.pcolor(predictions_probas)
     plt.show()
     plt.gcf().clear()
@@ -180,12 +183,13 @@ def knn(data, k, pred):
     else:
         print "Predicted Result: No Upset"
     print "Predicted Probability of Upset: ", nbrs.predict_proba(Test_Input)[0][1]
+    root.destroy()
 
 def main():
     # Test Case for Challenge 1
-    X = [[4,4,2,2,3,1,1],[1,5,5,2,1,4,5],[1,5,1,1,4,1,4],[5,4,3,1,1,1,2],
-    [1,4,4,1,1,5,5],[5,5,3,5,5,1,2],[1,5,3,5,0,5,5]]
-    print "The Missing Result was predicted to be: ", nmf(X)
+    # X = [[4,4,2,2,3,1,1],[1,5,5,2,1,4,5],[1,5,1,1,4,1,4],[5,4,3,1,1,1,2],
+    # [1,4,4,1,1,5,5],[5,5,3,5,5,1,2],[1,5,3,5,0,5,5]]
+    # print "The Missing Result was predicted to be: ", nmf(X)
 
     # Test Case for Challenge 2
     X = [[13.2,236,58,21.2],[10, 263, 48, 44.5],[8.1,294,80,31],[8.8,190,50,19.5],
@@ -207,7 +211,7 @@ def main():
     Data = March_Madness_Data()
     X = Data.data
     T = 3
-    knn(X, 10, 3)
+    knn(X, 7, 3)
 
 class March_Madness_Data:
     def __init__(self):

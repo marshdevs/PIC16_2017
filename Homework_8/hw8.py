@@ -182,8 +182,6 @@ class PlotGui(QtWidgets.QMainWindow):
         self.quad_eq_c = 0
         self.UI_setup()
         self.show()
-        # Toolbar for plot colors
-        #
 
     def UI_setup(self):
         self.figure = Figure()
